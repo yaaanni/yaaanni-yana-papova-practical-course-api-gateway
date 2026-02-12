@@ -1,0 +1,32 @@
+external:
+  auth-service:
+    url: ${EXTERNAL_AUTH_SERVICE_URL}
+  user-service:
+    url: ${EXTERNAL_USER_SERVICE_URL}
+
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: user-service-users
+              uri: http://user-service:8080
+              predicates:
+                - Path=/users/**
+            - id: user-service-cards
+              uri: http://user-service:8080
+              predicates:
+                - Path=/cards/**
+            - id: auth-service
+              uri: http://auth-service:8080
+              predicates:
+                - Path=/auth/**
+            - id: order-service-orders
+              uri: http://order-service:8080
+              predicates:
+                - Path=/orders/**
+            - id: user-service-items
+              uri: http://order-service:8080
+              predicates:
+                - Path=/items/**
