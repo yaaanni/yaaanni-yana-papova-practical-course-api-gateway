@@ -30,3 +30,7 @@ spring:
               uri: http://order-service:8080
               predicates:
                 - Path=/items/**
+            - id: payment-service
+              uri: http://payment-service:8080
+              predicates:
+                - Path=/payments/**
