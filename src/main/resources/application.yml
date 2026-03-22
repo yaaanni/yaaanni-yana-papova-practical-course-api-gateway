@@ -1,0 +1,72 @@
+external:
+  auth-service:
+    url: ${EXTERNAL_AUTH_SERVICE_URL:http://auth-service:8080}
+  user-service:
+    url: ${EXTERNAL_USER_SERVICE_URL:http://user-service:8080}
+  order-service:
+    url: ${EXTERNAL_ORDER_SERVICE_URL:http://order-service:8080}
+  payment-service:
+    url: ${EXTERNAL_PAYMENT_SERVICE_URL:http://payment-service:8080}
+
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: user-service-users
+              uri: ${external.user-service.url}
+              predicates:
+                - Path=/users/**
+            - id: user-service-cards
+              uri: ${external.user-service.url}
+              predicates:
+                - Path=/cards/**
+            - id: auth-service
+              uri: ${external.auth-service.url}
+              predicates:
+                - Path=/auth/**
+            - id: order-service-orders
+              uri: ${external.order-service.url}
+              predicates:
+                - Path=/orders/**
+            - id: order-service-items
+              uri: ${external.order-service.url}
+              predicates:
+                - Path=/items/**
+            - id: payment-service
+              uri: ${external.payment-service.url}
+              predicates:
+                - Path=/payments/**
+  application:
+    name: api-gateway
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,prometheus"
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  tracing:
+    sampling:
+      probability: 1.0
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: "http://alloy:4318/v1/traces"
+  otlp:
+    metrics:
+      export:
+        enabled: false
+        url: "http://alloy:4318/v1/metrics"
