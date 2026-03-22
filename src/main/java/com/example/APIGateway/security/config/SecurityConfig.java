@@ -21,7 +21,7 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers("/auth/**", "/api/register").permitAll()
+                        .pathMatchers("/auth/**", "/api/register", "/actuator/**").permitAll()
                         .anyExchange().authenticated())
                 .addFilterBefore(jwtFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 .build();

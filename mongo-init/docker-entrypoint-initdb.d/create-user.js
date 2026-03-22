@@ -9,3 +9,11 @@ db.createUser({
   ]
 });
 
+db.createUser({
+  user: "mongo_exporter",
+  pwd: "exporter_password",
+  roles: [
+    { role: "clusterMonitor", db: "admin" },
+    { role: "read", db: "local" }
+  ]
+});
